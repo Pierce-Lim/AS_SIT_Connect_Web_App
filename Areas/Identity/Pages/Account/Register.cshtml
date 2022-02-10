@@ -1,0 +1,182 @@
+﻿@page
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<script type="text/javascript">
+    @*Name do not need validation*@
+
+    @*image file validation is done by adding  [accept = "image/*"] in line 132 below*@
+
+    function dateRegex() {
+        var dateInput = document.getElementById('dInput').value;
+
+        var dRegex = /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/;
+
+        if (!dateInput.match(dRegex)) {
+            document.getElementById("dValidation").innerHTML = "Credit Card Is Invalid";
+            document.getElementById("dValidation").style.color = "red";
+            return ("date_invalid")
+        }
+        else {
+            document.getElementById("dValidation").innerHTML = "Credit Card Is valid";
+            document.getElementById("dValidation").style.color = "white";
+            return ("date_valid")
+        }
+    }
+
+    function creditRegex() {
+        var creditInput = document.getElementById('cInput').value;
+
+        var cRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
+
+        if (!creditInput.match(cRegex)) {
+            document.getElementById("cValidation").innerHTML = "Credit Card Is Invalid";
+            document.getElementById("cValidation").style.color = "red";
+            return ("credit_invalid")
+        }
+        else {
+            document.getElementById("cValidation").innerHTML = "Credit Card Is valid";
+            document.getElementById("cValidation").style.color = "white";
+            return ("credit_valid")
+        }
+    }
+
+    function pwdRegex() {
+        var pwdInput = document.getElementById('pInput').value;
+
+        var pwdValidationMedium = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{12,}$/;
+        var pwdvalidationStrong = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!$%^&*-]).{12,}$/;
+
+        if (pwdInput.match(pwdvalidationStrong)) {
+            document.getElementById("pValidation").innerHTML = "Password Strength: Strong";
+            document.getElementById("pValidation").style.color = "green";
+            return ("pwd_strong")
+        }
+        else if (pwdInput.match(pwdValidationMedium)){
+            document.getElementById("pValidation").innerHTML = "Password Strength: Medium";
+            document.getElementById("pValidation").style.color = "#CCCC00";
+            return ("pwd_medium")
+        }
+        else {
+            document.getElementById("pValidation").innerHTML = "Password Strength: Weak";
+            document.getElementById("pValidation").style.color = "red";
+            return ("pwd_weak")
+        }
+    }
+
+    function emailRegex() {
+        var emailInput = document.getElementById('eInput').value;
+
+        var eValidation = /\S+@@\S+\.\S+/;
+
+        if (!emailInput.match(eValidation)) {
+            document.getElementById("eValidation").innerHTML = "The Email field is not a valid e-mail address.";
+            document.getElementById("eValidation").style.color = "red";
+            return ("email_invalid")
+        }
+        else {
+            document.getElementById("eValidation").innerHTML = "Valid Email Address";
+            document.getElementById("eValidation").style.color = "white";
+            return ("email_valid")
+        }
+</script>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
+            <h4>Create a new account.</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.FistName"></label>
+                <input asp-for="Input.FistName" class="form-control" />
+                <span asp-validation-for="Input.FistName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.LastName"></label>
+                <input asp-for="Input.LastName" class="form-control" />
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" onkeyup="javascript: emailRegex()" id="eInput" />
+                <span asp-validation-for="Input.Email" class="text-danger" id="eValidation"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" class="form-control" onkeyup="javascript: pwdRegex()" id="pInput" />
+                <span asp-validation-for="Input.Password" class="text-danger" id="pValidation"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword"></label>
+                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.BirthDate"></label>
+                <input asp-for="Input.BirthDate" class="form-control" onkeyup="javascript: dateRegex()" id="dInput"/>
+                <span asp-validation-for="Input.BirthDate" class="text-danger" id="dValidation"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.CreditCard"></label>
+                <input asp-for="Input.CreditCard" class="form-control" onkeyup="javascript: creditRegex()" id="cInput" />
+                <span asp-validation-for="Input.CreditCard" class="text-danger" id="cValidation"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.ImageFile"></label>
+                <input asp-for="Input.ImageFile" accept="image/*"/>
+                <span asp-validation-for="Input.ImageFile" class="text-danger" id="cValidation"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </div>
+    <div class="col-md-6 col-md-offset-2">
+        <section>
+            <h4>Use another service to register.</h4>
+            <hr />
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                            for details on setting up this ASP.NET application to support logging in via external services.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins)
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["googleReCaptcha:SiteKey"]"></script>
+    <script>
+        grecaptcha.ready(function() {
+            window.grecaptcha.execute('@Configuration["googleReCaptcha:SiteKey"]', { action: 'home' }).then(function (token) {
+                $("#captchaInput").val(token);
+            });
+        });
+    </script>
+
+}
