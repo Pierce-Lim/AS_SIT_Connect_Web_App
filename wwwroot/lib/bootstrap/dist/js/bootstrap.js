@@ -1074,10 +1074,10 @@
         return;
       }
 
-      var target = $(selector)[0];
+      //var target = $(selector)[0];
 
-      if (!target || !$(target).hasClass(ClassName$2.CAROUSEL)) {
-        return;
+      //if (!target || !$(target).hasClass(ClassName$2.CAROUSEL)) {
+      //  return;
       }
 
       var config = _objectSpread({}, $(target).data(), $(this).data());
