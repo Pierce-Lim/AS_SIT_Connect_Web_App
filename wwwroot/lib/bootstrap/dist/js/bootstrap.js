@@ -1067,12 +1067,21 @@
       });
     };
 
+
     //Carousel._dataApiClickHandler = function _dataApiClickHandler(event) {
     //  var selector = Util.getSelectorFromElement(this);
 
     //  if (!selector) {
     //    return;
     //  }
+
+    //Carousel._dataApiClickHandler = function _dataApiClickHandler(event) {
+    //  var selector = Util.getSelectorFromElement(this);
+
+    //  if (!selector) {
+    //    return;
+    //  }
+
 
     //  //var target = $(selector)[0];
 
